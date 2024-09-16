@@ -1,5 +1,6 @@
 import express from "express"
 import dotenv from "dotenv"
+import cookieParser from "cookie-parser"
 
 import { connectDb } from "./lib/db.js"
 
@@ -11,6 +12,7 @@ const app = express()
 
 // middlewares
 app.use(express.json())
+app.use(cookieParser()) // allow parse incoming cookies
 
 // routes
 app.use("/api/auth", authRoutes)
