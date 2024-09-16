@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import bcryptjs from "bcryptjs"
+import bcrypt from "bcryptjs"
 
 const userSchema = new mongoose.Schema(
 	{
@@ -41,12 +41,12 @@ const userSchema = new mongoose.Schema(
 )
 
 // pre-save hook to hash password before saving to database
-userSchema.pre("save", async (next) => {
-	if (!this.isModified("password")) return next
+userSchema.pre("save", async function (next) {
+	if (!this.isModified("password")) return next()
 
 	try {
-		const salt = await bcryptjs.salt(10)
-		this.password = await bcryptjs.hash(this.password, salt)
+		const salt = await bcrypt.genSalt(10)
+		this.password = await bcrypt.hash(this.password, salt)
 		next()
 	} catch (error) {
 		next(error)
@@ -55,7 +55,7 @@ userSchema.pre("save", async (next) => {
 
 // custom function for checking password
 userSchema.methods.comparePassword = async function (password) {
-	return bcryptjs.compare(password, this.password)
+	return bcrypt.compare(password, this.password)
 }
 
 const User = mongoose.model("User", userSchema)
