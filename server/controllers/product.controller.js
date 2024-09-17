@@ -98,7 +98,7 @@ export const deleteProduct = async (req, res) => {
 
 export const getRecommendedProducts = async (req, res) => {
 	try {
-		const products = Product.aggregate([
+		const products = await Product.aggregate([
 			{
 				$sample: { size: 3 },
 			},
@@ -119,6 +119,18 @@ export const getRecommendedProducts = async (req, res) => {
 			"Error in getRecommendedProducts controller",
 			error?.message
 		)
+		res.status(500).json({ message: "Server error", error: error?.message })
+	}
+}
+
+export const getProductsByCategory = async (req, res) => {
+	const { category } = req.params
+
+	try {
+		const products = await Product.find()
+		res.status(200).json({ products })
+	} catch (error) {
+		console.log("Error in getProductsByCategory controller", error?.message)
 		res.status(500).json({ message: "Server error", error: error?.message })
 	}
 }
