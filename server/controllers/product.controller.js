@@ -40,3 +40,11 @@ export const getFeaturedProducts = async (req, res) => {
 			.json({ message: "Server error", error: error?.message })
 	}
 }
+
+export const createProduct = async (req, res) => {
+	try {
+		
+	} catch (error) {
+		
+	}
+}
