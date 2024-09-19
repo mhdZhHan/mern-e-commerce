@@ -7,6 +7,7 @@ import { connectDb } from "./lib/db.js"
 import authRoutes from "./routes/auth.route.js"
 import productRoutes from "./routes/product.route.js"
 import cartRoutes from "./routes/cart.route.js"
+import couponsRoutes from "./routes/coupon.route.js"
 
 dotenv.config()
 
@@ -20,6 +21,7 @@ app.use(cookieParser()) // allow parse incoming cookies
 app.use("/api/auth", authRoutes)
 app.use("/api/products", productRoutes)
 app.use("/api/cart", cartRoutes)
+app.use("/api/coupons", couponsRoutes)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
