@@ -1,4 +1,5 @@
 import Coupon from "../models/coupon.model.js"
+import Order from "../models/order.model.js"
 import { stripe } from "../lib/stripe.js"
 
 export const createCheckoutSession = async (req, res) => {
@@ -63,6 +64,13 @@ export const createCheckoutSession = async (req, res) => {
 			metadata: {
 				user_id: req.user._id.toString(),
 				couponCode: couponCode || "",
+				products: JSON.stringify(
+					products.map((product) => ({
+						id: product._id,
+						quantity: product.quantity,
+						price: product.price,
+					}))
+				),
 			},
 		})
 
@@ -75,7 +83,54 @@ export const createCheckoutSession = async (req, res) => {
 			id: session.id,
 			totalAmount: totalAmount / 100, // convert into $
 		})
-	} catch (error) {}
+	} catch (error) {
+		console.log("Error in createCheckoutSession controller")
+		res.status(500).json({ message: "Server error", error: error?.message })
+	}
+}
+
+export const checkoutSuccess = async (req, res) => {
+	try {
+		const { sessionId } = req.body
+		const session = await stripe.checkout.sessions.retrieve(sessionId)
+
+		if (session.payment_status === "paid") {
+			if (session.metadata.couponCode) {
+				await Coupon.findOneAndUpdate(
+					{
+						code: session.metadata.couponCode,
+						userId: session.metadata.userId,
+					},
+					{ isActive: false }
+				)
+			}
+
+			// create a new order
+			const products = JSON.parse(session.metadata.product)
+			const newOrder = new Order({
+				user: session.metadata.userId,
+				products: products.map((product) => ({
+					product: product.id,
+					quantity: product.quantity,
+					price: product.price,
+				})),
+				totalAmount: session.amount_total / 100, // converts from cents to dollars
+				stripeSessionId: sessionId,
+			})
+
+			await newOrder.save()
+
+			res.status(200).json({
+				success: true,
+				message:
+					"Payment successful, order created, and coupon deactivated if used.",
+				orderId: newOrder._id,
+			})
+		}
+	} catch (error) {
+		console.log("Error in checkoutSuccess controller")
+		res.status(500).json({ message: "Server error", error: error?.message })
+	}
 }
 
 // functions
