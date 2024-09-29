@@ -7,6 +7,7 @@ import SignUpPage from "./pages/SignUpPage"
 
 // components
 import Navbar from "./components/Navbar"
+import { Toaster } from "react-hot-toast"
 
 function App() {
 	return (
@@ -27,6 +28,8 @@ function App() {
 					<Route path="/signup" element={<SignUpPage />} />
 				</Routes>
 			</div>
+
+			<Toaster />
 		</div>
 	)
 }
