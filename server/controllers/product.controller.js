@@ -127,7 +127,7 @@ export const getProductsByCategory = async (req, res) => {
 	const { category } = req.params
 
 	try {
-		const products = await Product.find()
+		const products = await Product.find({ category })
 		res.status(200).json({ products })
 	} catch (error) {
 		console.log("Error in getProductsByCategory controller", error?.message)
