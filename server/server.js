@@ -18,7 +18,7 @@ const app = express()
 
 // middlewares
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }))
-app.use(express.json())
+app.use(express.json({ limit: "10mb" }))
 app.use(cookieParser()) // allow parse incoming cookies
 
 // routes
