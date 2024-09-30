@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast"
 import HomePage from "./pages/HomePage"
 import LoginPage from "./pages/LoginPage"
 import SignUpPage from "./pages/SignUpPage"
+import AdminPage from "./pages/AdminPage"
 
 // components
 import Navbar from "./components/Navbar"
@@ -43,6 +44,16 @@ function App() {
 					<Route
 						path="/signup"
 						element={!user ? <SignUpPage /> : <Navigate to="/" />}
+					/>
+					<Route
+						path="/secret-dashboard"
+						element={
+							user?.role === "admin" ? (
+								<AdminPage />
+							) : (
+								<Navigate to="/login" />
+							)
+						}
 					/>
 				</Routes>
 			</div>
