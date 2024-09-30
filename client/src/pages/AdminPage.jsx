@@ -6,6 +6,8 @@ import CreateProductForm from "../components/CreateProductForm"
 import ProductsList from "../components/ProductsList"
 import AnalyticsTab from "../components/AnalyticsTab"
 
+import { useProductStore } from "../store/useProductStore"
+
 const tabs = [
 	{ id: "create", label: "Create Product", icon: PlusCircle },
 	{ id: "products", label: "Products", icon: ShoppingBasket },
@@ -14,6 +16,12 @@ const tabs = [
 
 const AdminPage = () => {
 	const [activeTab, setActiveTab] = useState("create")
+
+	const { fetchAllProducts } = useProductStore()
+
+	useEffect(() => {
+		fetchAllProducts()
+	}, [fetchAllProducts])
 
 	return (
 		<div className="min-h-screen relative overflow-hidden">
