@@ -16,7 +16,7 @@ export const useCartStore = create((set, get) => ({
 			get().calculateTotals()
 		} catch (error) {
 			set({ cart: [] })
-			toast.error(error.response?.data?.message || "An error occurred")
+			console.log(error.response?.data?.message || "An error occurred")
 		}
 	},
 
@@ -45,6 +45,29 @@ export const useCartStore = create((set, get) => ({
 			set({ cart: [] })
 			toast.error(error.response?.data?.message || "Err adding to cart")
 		}
+	},
+
+	removeFromCart: async (productId) => {
+		await axios.delete("/cart", { data: { productId } })
+		set((prevState) => ({
+			cart: prevState.cart.filter((item) => item._id !== productId),
+		}))
+		get().calculateTotals()
+	},
+
+	updateQuantity: async (productId, quantity) => {
+		if (quantity === 0) {
+			get().removeFromCart(productId)
+			return
+		}
+
+		axios.put(`cart/${productId}`, { quantity })
+		set((prevState) => ({
+			cart: prevState.cart.map((item) =>
+				item._id === productId ? { ...item, quantity: quantity } : item
+			),
+		}))
+		get().calculateTotals()
 	},
 
 	calculateTotals: () => {
