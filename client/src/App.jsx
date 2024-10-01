@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage"
 import LoginPage from "./pages/LoginPage"
 import SignUpPage from "./pages/SignUpPage"
 import AdminPage from "./pages/AdminPage"
+import CategoryPage from "./pages/CategoryPage"
 
 // components
 import Navbar from "./components/Navbar"
@@ -54,6 +55,10 @@ function App() {
 								<Navigate to="/login" />
 							)
 						}
+					/>
+					<Route
+						path="/category/:category"
+						element={<CategoryPage />}
 					/>
 				</Routes>
 			</div>
