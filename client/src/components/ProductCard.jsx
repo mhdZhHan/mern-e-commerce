@@ -1,9 +1,11 @@
 import toast from "react-hot-toast"
 import { ShoppingCart } from "lucide-react"
 import { useUserStore } from "../store/useUserStore"
+import { useCartStore } from "../store/useCartStore"
 
 const ProductCard = ({ product }) => {
 	const { user } = useUserStore()
+	const { addToCart } = useCartStore()
 
 	const handleAddToCart = () => {
 		if (!user) {
@@ -12,6 +14,7 @@ const ProductCard = ({ product }) => {
 		}
 
 		// add to the cart
+		addToCart(product)
 	}
 
 	return (
