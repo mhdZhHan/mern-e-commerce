@@ -8,19 +8,26 @@ import LoginPage from "./pages/LoginPage"
 import SignUpPage from "./pages/SignUpPage"
 import AdminPage from "./pages/AdminPage"
 import CategoryPage from "./pages/CategoryPage"
+import CartPage from "./pages/CartPage"
 
 // components
 import Navbar from "./components/Navbar"
 import LoadingSpinner from "./components/LoadingSpinner"
 
 import { useUserStore } from "./store/useUserStore"
+import { useCartStore } from "./store/useCartStore"
 
 function App() {
 	const { user, checkAuth, isCheckingAuth } = useUserStore()
+	const { getCartItems } = useCartStore()
 
 	useEffect(() => {
 		checkAuth()
 	}, [checkAuth])
+
+	useEffect(() => {
+		getCartItems()
+	}, [getCartItems])
 
 	if (isCheckingAuth) return <LoadingSpinner />
 
@@ -59,6 +66,10 @@ function App() {
 					<Route
 						path="/category/:category"
 						element={<CategoryPage />}
+					/>
+					<Route
+						path="/cart"
+						element={user ? <CartPage /> : <Navigate to="/login" />}
 					/>
 				</Routes>
 			</div>
