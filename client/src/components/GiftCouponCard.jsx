@@ -4,11 +4,26 @@ import { useCartStore } from "../store/useCartStore"
 
 const GiftCouponCard = () => {
 	const [userInputCode, setUserInputCode] = useState("")
-	const { coupon, isCouponApplied } = useCartStore()
+	const { coupon, isCouponApplied, applyCoupon, getMyCoupon, removeCoupon } =
+		useCartStore()
 
-	const handleApplyCoupon = () => {}
+	useEffect(() => {
+		getMyCoupon()
+	}, [getMyCoupon])
 
-	const handleRemoveCoupon = async () => {}
+	useEffect(() => {
+		if (coupon) setUserInputCode(coupon.code)
+	}, [coupon])
+
+	const handleApplyCoupon = () => {
+		if (!userInputCode) return
+		applyCoupon(userInputCode)
+	}
+
+	const handleRemoveCoupon = async () => {
+		await removeCoupon()
+		setUserInputCode("")
+	}
 
 	return (
 		<motion.div
@@ -48,7 +63,6 @@ const GiftCouponCard = () => {
 					Apply Code
 				</motion.button>
 			</div>
-
 			{isCouponApplied && coupon && (
 				<div className="mt-4">
 					<h3 className="text-lg font-medium text-gray-300">
