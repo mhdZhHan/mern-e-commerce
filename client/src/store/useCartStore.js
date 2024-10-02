@@ -7,6 +7,7 @@ export const useCartStore = create((set, get) => ({
 	coupon: null,
 	total: 0,
 	subtotal: 0,
+	isCouponApplied: false,
 
 	getCartItems: async () => {
 		try {
@@ -72,7 +73,10 @@ export const useCartStore = create((set, get) => ({
 
 	calculateTotals: () => {
 		const { cart, coupon } = get()
-		const subtotal = cart.reduce((sum, item) => sum + item.price)
+		const subtotal = cart.reduce(
+			(sum, item) => sum + item.price * item.quantity,
+			0
+		)
 		let total = subtotal
 
 		if (coupon) {

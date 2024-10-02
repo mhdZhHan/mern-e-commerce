@@ -5,6 +5,8 @@ import { ShoppingCart } from "lucide-react"
 import { useCartStore } from "../store/useCartStore"
 import CartItem from "../components/CartItem"
 import PeopleAlsoBought from "../components/PeopleAlsoBought"
+import GiftCouponCard from "../components/GiftCouponCard"
+import OrderSummary from "../components/OrderSummary"
 
 const CartPage = () => {
 	const { cart } = useCartStore()
@@ -30,6 +32,18 @@ const CartPage = () => {
 
 						{cart.length > 0 && <PeopleAlsoBought />}
 					</motion.div>
+
+					{cart.length > 0 && (
+						<motion.div
+							className="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full"
+							initial={{ opacity: 0, x: 20 }}
+							animate={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.5, delay: 0.4 }}
+						>
+							<OrderSummary />
+							<GiftCouponCard />
+						</motion.div>
+					)}
 				</div>
 			</div>
 		</div>
