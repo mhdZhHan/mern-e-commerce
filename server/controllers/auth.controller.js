@@ -110,7 +110,7 @@ export const login = async (req, res) => {
 			setCookies(res, accessToken, refreshToken)
 		} else {
 			return res
-				.status(401)
+				.status(400)
 				.json({ message: "Invalid email or password" })
 		}
 
