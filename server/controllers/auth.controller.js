@@ -193,6 +193,9 @@ export const refreshToken = async (req, res) => {
 
 export const getProfile = async (req, res) => {
 	try {
+		if (!req.user) {
+			return res.status(401).json({ message: "User not authenticated" })
+		}
 		res.status(200).json(req.user)
 	} catch (error) {
 		console.log("Error in getProfile controller", error.message)
